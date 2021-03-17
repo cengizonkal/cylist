@@ -46,22 +46,13 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
         'maxResults' => 50
     );
     $youtubeList = $youtube->getPlaylistItemsByPlaylistIdAdvanced($params, true);
-
-//    echo '<pre>';
-//    var_dump($youtubeList['results'][0]);
-    // start box
-
-
     $o = '<div class="row">';
-
     foreach ($youtubeList['results'] as $item) {
         $o .= '
         <div class="col-md-4">   
         <iframe width="560" height="315" src="https://www.youtube.com/embed/'.$item->snippet->resourceId->videoId.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>';
     }
-
-    // title
     $o .= '</div>';
 
 
