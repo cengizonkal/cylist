@@ -56,21 +56,9 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
 
     foreach ($youtubeList['results'] as $item) {
         $o .= '
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="'.$item->snippet->thumbnails->default->url.'">
-                <div class="card-body">
-                  <p class="card-text">'.$item->snippet->description.'</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-muted">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>';
+        <div class="col-md-4">   
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/'.$item->snippet->resourceId->videoId.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>';
     }
 
     // title
