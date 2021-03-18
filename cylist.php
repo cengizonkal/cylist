@@ -41,9 +41,11 @@ function my_ajax_handler()
 {
     check_ajax_referer('cylist_ajax');
     $args = [
-        'tag' => $_POST['token'],
+        'page_token' => $_POST['token'],
+        'you_tube_list_id' => $_POST['you_tube_list_id']
     ];
-    wp_send_json(['test_response']);
+    echo getVideos($args['youtube_list_id'], $args['token']);
+
     wp_die();
 }
 
@@ -57,6 +59,7 @@ function my_ajax_handler()
  * @param  string  $content  Shortcode content. Default null.
  * @param  string  $tag  Shortcode tag (name). Default empty.
  * @return string Shortcode output.
+ * @throws Exception
  */
 function cylist_shortcode($atts = [], $content = null, $tag = '')
 {
@@ -65,22 +68,26 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
 
     // override default attributes with user attributes
     $cylist_atts = shortcode_atts(
-        [
-            'api_key' => 'your_api_key',
-            'youtube_list_id' => 'enter_youtube_list_id',
-        ],
+        ['youtube_list_id' => 'enter_youtube_list_id'],
         $atts,
         $tag
     );
+    return getVideos($cylist_atts['youtube_list_id'], null);
+}
 
-    $youtube = new Madcoda\Youtube\Youtube(['key' => $cylist_atts['api_key']]);
+
+function getVideos($youtubeListId, $pageToken)
+{
+    $config = include __DIR__.'/config.php';
+    $youtube = new Madcoda\Youtube\Youtube(['key' => $config['api_key']]);
     $params = array(
-        'playlistId' => $cylist_atts['youtube_list_id'],
+        'playlistId' => $youtubeListId,
         'part' => 'id, snippet, contentDetails, status',
-        'maxResults' => 5
+        'maxResults' => 5,
+        'page' => $pageToken
     );
     $youtubeList = $youtube->getPlaylistItemsByPlaylistIdAdvanced($params, true);
-    $o = '<div class="row">';
+    $o = '<div class="row" id="cylist_container">';
 
     foreach ($youtubeList['results'] as $item) {
         $o .= '
