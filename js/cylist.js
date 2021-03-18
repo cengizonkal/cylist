@@ -5,6 +5,8 @@ function loadMoreVideos(token, list_id) {
         page_token: token,
         you_tube_list_id: list_id
     }, function (data) {
-        console.log(data)
+        jQuery('#cylist_load_more').remove();
+        jQuery('#cylist_container').append(data);
+
     });
 }

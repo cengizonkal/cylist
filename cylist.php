@@ -47,7 +47,7 @@ function cylist_ajax_handler()
     ];
 
 
-    echo getVideos($args['you_tube_list_id'], $args['token']);
+    echo getVideos($args['you_tube_list_id'], $args['page_token']);
 
 
     wp_die();
