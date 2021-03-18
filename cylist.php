@@ -88,7 +88,7 @@ function getVideos($youtubeListId, $pageToken)
         'playlistId' => $youtubeListId,
         'part' => 'id, snippet, contentDetails, status',
         'maxResults' => 5,
-        'page' => $pageToken
+        'pageToken' => $pageToken
     );
     $youtubeList = $youtube->getPlaylistItemsByPlaylistIdAdvanced($params, true);
     $o = '<div class="row" id="cylist_container">';
