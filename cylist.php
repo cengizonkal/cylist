@@ -36,15 +36,19 @@ function cylist_enqueue($hook)
 }
 
 
-add_action('wp_ajax_my_tag_count', 'my_ajax_handler');
-function my_ajax_handler()
+add_action('wp_ajax_cylist', 'cylist_ajax_handler');
+function cylist_ajax_handler()
 {
     check_ajax_referer('cylist_ajax');
+
     $args = [
         'page_token' => $_POST['page_token'],
         'you_tube_list_id' => $_POST['you_tube_list_id']
     ];
-    echo getVideos($args['youtube_list_id'], $args['token']);
+
+
+    echo getVideos($args['you_tube_list_id'], $args['token']);
+
 
     wp_die();
 }
@@ -96,7 +100,7 @@ function getVideos($youtubeListId, $pageToken)
         </div>';
     }
 
-    $o .= '<button class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\',\''.$youtubeListId.'\')">Load More</button>';
+    $o .= '<button id="cylist_load_more" class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\',\''.$youtubeListId.'\')">Load More</button>';
     $o .= '</div>';
 
     return $o;
