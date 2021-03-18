@@ -14,6 +14,40 @@ License: MIT
 require 'vendor/autoload.php';
 
 
+add_action('wp_enqueue_scripts', 'cylist_enqueue');
+function cylist_enqueue($hook)
+{
+    wp_enqueue_script(
+        'ajax-script',
+        plugins_url('/js/cylist.js', __FILE__),
+        ['jquery'],
+        '1.0.0',
+        true
+    );
+
+    wp_localize_script(
+        'ajax-script',
+        'cylist_ajax_obj',
+        array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('cylist_ajax'),
+        )
+    );
+}
+
+
+add_action('wp_ajax_my_tag_count', 'my_ajax_handler');
+function my_ajax_handler()
+{
+    check_ajax_referer('cylist_ajax');
+    $args = [
+        'tag' => $_POST['token'],
+    ];
+    wp_send_json(['test_response']);
+    wp_die();
+}
+
+
 /**
  * The [cylist] shortcode.
  *
@@ -43,7 +77,7 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
     $params = array(
         'playlistId' => $cylist_atts['youtube_list_id'],
         'part' => 'id, snippet, contentDetails, status',
-        'maxResults' => 50
+        'maxResults' => 5
     );
     $youtubeList = $youtube->getPlaylistItemsByPlaylistIdAdvanced($params, true);
     $o = '<div class="row">';
@@ -55,9 +89,25 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
     }
     $o .= '</div>';
 
+    $o .= '<button class="btn btn-info btn-lg" onclick="loadMoreVideos(\'token\')">Load More</button>';
+
+
+    $o .= '<script>
+    function loadMoreVideos(token) {
+        jQuery.post(cylist_ajax_obj.ajax_url, {
+            _ajax_nonce: cylist_ajax_obj.nonce,
+            action: "my_tag_count",
+            token: token
+        }, function (data) {
+            console.log(data)
+        });
+    }
+</script>';
+
 
     return $o;
 }
+
 
 /**
  * Central location to create all shortcodes.
