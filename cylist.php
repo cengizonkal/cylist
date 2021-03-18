@@ -81,29 +81,16 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
     );
     $youtubeList = $youtube->getPlaylistItemsByPlaylistIdAdvanced($params, true);
     $o = '<div class="row">';
+
     foreach ($youtubeList['results'] as $item) {
         $o .= '
         <div class="col-md-4">   
         <iframe width="560" height="315" src="https://www.youtube.com/embed/'.$item->snippet->resourceId->videoId.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>';
     }
+
+    $o .= '<button class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\')">Load More</button>';
     $o .= '</div>';
-
-    $o .= '<button class="btn btn-info btn-lg" onclick="loadMoreVideos(\'token\')">Load More</button>';
-
-
-    $o .= '<script>
-    function loadMoreVideos(token) {
-        jQuery.post(cylist_ajax_obj.ajax_url, {
-            _ajax_nonce: cylist_ajax_obj.nonce,
-            action: "my_tag_count",
-            token: token
-        }, function (data) {
-            console.log(data)
-        });
-    }
-</script>';
-
 
     return $o;
 }
