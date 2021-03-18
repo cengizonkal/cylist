@@ -41,7 +41,7 @@ function my_ajax_handler()
 {
     check_ajax_referer('cylist_ajax');
     $args = [
-        'page_token' => $_POST['token'],
+        'page_token' => $_POST['page_token'],
         'you_tube_list_id' => $_POST['you_tube_list_id']
     ];
     echo getVideos($args['youtube_list_id'], $args['token']);
@@ -96,7 +96,7 @@ function getVideos($youtubeListId, $pageToken)
         </div>';
     }
 
-    $o .= '<button class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\')">Load More</button>';
+    $o .= '<button class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\',\''.$youtubeListId.'\')">Load More</button>';
     $o .= '</div>';
 
     return $o;
