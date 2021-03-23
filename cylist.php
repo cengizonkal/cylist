@@ -46,10 +46,7 @@ function cylist_ajax_handler()
         'you_tube_list_id' => sanitize_text_field($_POST['you_tube_list_id'])
     ];
 
-
     echo cylist_get_videos($args['you_tube_list_id'], $args['page_token']);
-
-
     wp_die();
 }
 
