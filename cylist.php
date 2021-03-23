@@ -2,11 +2,11 @@
 
 /*
 Plugin Name: Cylist
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Plugin URI: https://github.com/cengizonkal/cylist
 Description: Show youtube list items
 Version: 1.0
 Author: Cengiz Önkal <onkal.cengiz@gmail.com>
-Author URI: http://URI_Of_The_Plugin_Author
+Author URI: https://github.com/cengizonkal
 License: MIT
 */
 
@@ -42,12 +42,12 @@ function cylist_ajax_handler()
     check_ajax_referer('cylist_ajax');
 
     $args = [
-        'page_token' => $_POST['page_token'],
-        'you_tube_list_id' => $_POST['you_tube_list_id']
+        'page_token' => sanitize_text_field($_POST['page_token']),
+        'you_tube_list_id' => sanitize_text_field($_POST['you_tube_list_id'])
     ];
 
 
-    echo getVideos($args['you_tube_list_id'], $args['page_token']);
+    echo cylist_get_videos($args['you_tube_list_id'], $args['page_token']);
 
 
     wp_die();
@@ -76,11 +76,11 @@ function cylist_shortcode($atts = [], $content = null, $tag = '')
         $atts,
         $tag
     );
-    return getVideos($cylist_atts['youtube_list_id'], null);
+    return cylist_get_videos($cylist_atts['youtube_list_id'], null);
 }
 
 
-function getVideos($youtubeListId, $pageToken)
+function cylist_get_videos($youtubeListId, $pageToken)
 {
     $config = include __DIR__.'/config.php';
     $youtube = new Madcoda\Youtube\Youtube(['key' => $config['api_key']]);
@@ -100,8 +100,8 @@ function getVideos($youtubeListId, $pageToken)
         </div>';
     }
 
-    $o .= '<button id="cylist_load_more" class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\',\''.$youtubeListId.'\')">Load More</button>';
     $o .= '</div>';
+    $o .= '<div class="row"><div class="col-md-12"><button id="cylist_load_more" class="btn btn-info btn-lg" onclick="loadMoreVideos(\''.$youtubeList['info']['nextPageToken'].'\',\''.$youtubeListId.'\')">Load More</button></div></div>';
 
     return $o;
 }
