@@ -4,7 +4,7 @@
 Plugin Name: Cylist
 Plugin URI: https://github.com/cengizonkal/cylist
 Description: Show youtube list items
-Version: 1.0
+Version: v1.0.0
 Author: Cengiz Önkal <onkal.cengiz@gmail.com>
 Author URI: https://github.com/cengizonkal
 License: MIT

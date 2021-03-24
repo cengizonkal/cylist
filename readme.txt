@@ -6,7 +6,7 @@ Tested up to: 5.6.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-Stable tag: trunk
+Stable tag: v1.0.0
 
 show youtube list on page
 
